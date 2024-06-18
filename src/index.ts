@@ -42,7 +42,6 @@ client.on(Events.MessageCreate, async (message) => {
       guildId: message.guild!.id,
       adapterCreator: message.guild!.voiceAdapterCreator,
     });
-    console.log(1);
 
     const stream = ytdl(url, {
       filter: 'audioonly',
@@ -50,18 +49,13 @@ client.on(Events.MessageCreate, async (message) => {
       quality: 'highest',
       highWaterMark: 1 << 25,
     });
-    console.log(6);
 
     const resource = createAudioResource(stream);
-    console.log(5);
     const player = createAudioPlayer();
-    console.log(4);
 
     connection.subscribe(player);
-    console.log(3);
     player.play(resource);
 
-    console.log(2);
     player.on(AudioPlayerStatus.Playing, () => {
       console.log('The bot has started playing audio.');
     });

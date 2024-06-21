@@ -7,6 +7,9 @@ import {
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import 'dotenv/config';
 import ytdl from 'ytdl-core';
+import { registerCommands } from './commands';
+import { ping } from './commands/ping';
+import { play } from './commands/play';
 
 const client = new Client({
   intents: [
@@ -23,6 +26,16 @@ client.once(Events.ClientReady, (readyClient) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === 'ping') {
+    ping.execute(interaction);
+  } else if (interaction.commandName === 'play') {
+    play.execute(interaction);
+  }
 });
 
 client.on(Events.MessageCreate, async (message) => {
@@ -69,4 +82,9 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+const main = async () => {
+  await registerCommands();
+  client.login(process.env.DISCORD_TOKEN);
+};
+
+main();
